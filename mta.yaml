@@ -12,7 +12,7 @@ build-parameters:
 modules:
   - name: CAP_CDS_Training-srv
     type: nodejs
-    path: gen/srv
+    path: .
     parameters:
       buildpack: nodejs_buildpack
     build-parameters:
@@ -23,10 +23,12 @@ modules:
           srv-url: ${default-url}
     requires:
       - name: CAP_CDS_Training-db
+        properties:
+          TARGET_CONTAINER: ~{hdi-service-name}
 
   - name: CAP_CDS_Training-db-deployer
     type: hdb
-    path: gen/db
+    path: db
     parameters:
       buildpack: nodejs_buildpack
     requires:
@@ -38,3 +40,5 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+    properties:
+      hdi-service-name: ${service-name}
